@@ -7,16 +7,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LogSetup {
+
+    private LogSetup() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void setup() {
         Logger rootLogger = Logger.getLogger("");
-
-        // Remove os handlers padrão
         for (Handler handler : rootLogger.getHandlers()) {
             rootLogger.removeHandler(handler);
         }
-
-        // Adiciona o handler customizado
         rootLogger.addHandler(new PersonalizedConsoleHandler());
-        rootLogger.setLevel(Level.ALL); // Configura o nível global
+        rootLogger.setLevel(Level.ALL);
     }
 }

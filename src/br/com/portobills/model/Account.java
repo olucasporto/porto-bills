@@ -38,7 +38,7 @@ public abstract class Account {
     public abstract String getType();
 
     public String formatLog() {
-        return String.format("[%s] %s - R$ %.2f%nData/Hora: %s%nCategorias: %s%nObservação: %s%n",
+        return String.format("[%s] %s - R$ %.2f%nData/Hora: %s%nCategorias: %s%nObservação: %s",
                 getType(),
                 name,
                 amount,

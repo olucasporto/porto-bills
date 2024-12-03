@@ -5,28 +5,35 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 public class PersonalizedConsoleHandler extends ConsoleHandler {
+
     public PersonalizedConsoleHandler() {
-        setLevel(Level.ALL); // Define que o handler processará todos os níveis
+        setLevel(Level.ALL);
+        setFormatter(new CustomLogFormatter());
     }
 
     @Override
     protected void setOutputStream(java.io.OutputStream out) {
-        super.setOutputStream(System.out); // Redireciona para o console
+        super.setOutputStream(System.out);
     }
 
     @Override
     public void publish(LogRecord record) {
-        String message = record.getMessage();
-
-        if (record.getLevel() == Level.SEVERE) {
-            message = LogColor.RED.apply(message);
-        } else if (record.getLevel() == Level.WARNING) {
-            message = LogColor.YELLOW.apply(message);
-        } else if (record.getLevel() == Level.INFO) {
-            message = LogColor.GREEN.apply(message);
+        if (!isLoggable(record)) {
+            return;
         }
-
-        record.setMessage(message);
+        String originalMessage = record.getMessage();
+        record.setMessage(getColoredMessage(record, originalMessage));
         super.publish(record);
+    }
+
+    private static String getColoredMessage(LogRecord record, String originalMessage) {
+        if (record.getLevel() == Level.SEVERE) {
+            return LogColor.RED.apply(originalMessage);
+        } else if (record.getLevel() == Level.WARNING) {
+            return LogColor.YELLOW.apply(originalMessage);
+        } else if (record.getLevel() == Level.INFO) {
+            return LogColor.GREEN.apply(originalMessage);
+        }
+        return originalMessage;
     }
 }
